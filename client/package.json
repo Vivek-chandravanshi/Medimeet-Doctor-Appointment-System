@@ -6,6 +6,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^2.8.2",
     "antd": "^5.22.5",
+    "appointment-system": "file:..",
     "axios": "^1.7.9",
     "cra-template": "1.2.0",
     "moment": "^2.30.1",

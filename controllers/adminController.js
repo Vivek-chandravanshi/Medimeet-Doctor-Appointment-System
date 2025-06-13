@@ -1,9 +1,8 @@
+const doctorModel = require("../models/doctorModel");
+const userModel = require('../models/userModel')
 
-const doctorModel = require('../models/doctorModel');
-const userModel = require('../models/userModel');
 
-
-const getAllUsersController = async()=>{
+const getAllUsersController = async(req, res)=>{
     try{
         const users = await userModel.find({})
         res.status(200).send({
@@ -13,7 +12,8 @@ const getAllUsersController = async()=>{
         })
     }
     catch(error){
-        console.log(error).send({
+        console.log(error);
+        res.status(500).send({
             success:false,
             message:'error while fetching users',
             error
@@ -22,7 +22,7 @@ const getAllUsersController = async()=>{
 
 }
 
-const getAllDoctorsController = async()=>{
+const getAllDoctorsController = async(req, res)=>{
         try{
             const doctors = await doctorModel.find({})
             res.status(200).send({
@@ -32,7 +32,8 @@ const getAllDoctorsController = async()=>{
         })
     }
     catch(error){
-        console.log(error).send({
+        console.log(error);
+        res.status(500).send({
             success:false,
             message:'error while fetching doctors',
             error
@@ -42,29 +43,46 @@ const getAllDoctorsController = async()=>{
 
 const changeAccountStatusController = async(req, res) => {
     try {
-         const {doctorId, status} = req.body;
-         const doctor = await doctorModel.findByIdAndUpdate(doctorId, {status});
-         const user = await userModel.findOne({_id:doctor.userId})
-         const notification = user.notification;
-         notification.push({
+        const { doctorId, status } = req.body;
+        // Get the updated doctor document
+        const doctor = await doctorModel.findByIdAndUpdate(
+            doctorId,
+            { status },
+            { new: true }
+        );
+        if (!doctor) {
+            return res.status(404).send({
+                success: false,
+                message: 'Doctor not found'
+            });
+        }
+        const user = await userModel.findOne({ _id: doctor.userId });
+        if (!user) {
+            return res.status(404).send({
+                success: false,
+                message: 'User not found'
+            });
+        }
+        user.notification.push({
             type: 'doctor-account-request-updated',
             message: `Your account status has been updated to ${status}`,
             onClickPath: '/notifications'
-         });
+        });
+        // Set isDoctor to true only if status is 'approved'
         user.isDoctor = status === 'approved';
         await user.save();
         res.status(200).send({
-            success:true,
-            message:'account status updated successfully',
-            data:doctor
-        })
-    }catch(error){
+            success: true,
+            message: 'Account status updated successfully',
+            data: doctor
+        });
+    } catch (error) {
         console.log(error);
         res.status(500).send({
-            success:false,
-            message:'error while changing account status',
+            success: false,
+            message: 'Error while changing account status',
             error
-        })
+        });
     }
 }
 

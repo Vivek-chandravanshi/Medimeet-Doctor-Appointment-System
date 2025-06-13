@@ -26,7 +26,7 @@ export const Layout = ({ children }) => {
     },
     {
         name:'Appointments',
-        path:'/appointments',
+        path:'/doctor-appointments',
         icon:'fa-solid fa-list-ul'
     },
     {
@@ -35,7 +35,7 @@ export const Layout = ({ children }) => {
         icon: "fa-solid fa-user"
     }
 ];
-//===========adoctor menu ==========
+//===========doctor menu ==========
 
 const SidebarMenu = user?.isAdmin ? adminMenu : user?. isDoctor? doctorMenu : UserMenu;
 
@@ -86,3 +86,5 @@ const SidebarMenu = user?.isAdmin ? adminMenu : user?. isDoctor? doctorMenu : Us
     </div>
   );
 };
+
+export default Layout;

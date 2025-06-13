@@ -12,6 +12,11 @@ import NotificationPage from './pages/NotificationPage';
 import Users from './pages/admin/Users';
 import Doctors from './pages/admin/Doctors';
 import Profile from './pages/doctor/Profile';
+import BookingPage from './pages/BookingPage';
+import Appointments from './pages/Appointments';
+import DoctorAppointments from './pages/doctor/DoctorAppointments';
+import UserProfile from './pages/UserProfile';
+import AdminProfile from './pages/AdminProfile';
 
 function App() {
   const {loading} = useSelector(state => state.alerts)
@@ -38,6 +43,12 @@ function App() {
                   </ProtectedRoutes>
                 }
           />
+          <Route path='/doctor/book-appointment/:doctorId' element = {
+                  <ProtectedRoutes>
+                    <BookingPage/>
+                  </ProtectedRoutes>
+                }
+          />
           <Route path='/admin/users' element = {
                   <ProtectedRoutes>
                     <Users/>
@@ -56,15 +67,38 @@ function App() {
                   </ProtectedRoutes>
                 }
           />
+          <Route path='/profile' element={
+              <ProtectedRoutes>
+                <UserProfile/>
+              </ProtectedRoutes>
+            }/>
+
+            <Route path = '/admin/profile' element = {
+              <ProtectedRoutes>
+                <AdminProfile/>
+              </ProtectedRoutes>
+            }/>
           <Route path='/login' element = {
             <PublicRoute>
-               <Login/>
+                <Login/>
                </PublicRoute>
               } />
           <Route path='/register' element = {
               <PublicRoute>
-              <Register/>
+                <Register/>
               </PublicRoute>
+            } />
+
+          <Route path='/appointments' element = {
+              <ProtectedRoutes>
+                <Appointments/>
+              </ProtectedRoutes>
+            } />
+
+          <Route path='/doctor-appointments' element = {
+              <ProtectedRoutes>
+                <DoctorAppointments/>
+              </ProtectedRoutes>
             } />
         </Routes>)
         }     

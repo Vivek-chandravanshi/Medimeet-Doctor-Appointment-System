@@ -10,21 +10,27 @@ const ApplyDoctor = () => {
   const {user} = useSelector(state=>state.user)
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const handleFinish = async (values) => {
-    console.log("Form submitted with values:", values);
+    //console.log("Form submitted with values:", values);
      try{
-      dispatch(showLoading)
-      const res = await axios.post('/api/v1/user/apply-doctor', {...values}, {userId:user._id}, {
+      dispatch(showLoading())
+      const res = await axios.post('/api/v1/user/apply-doctor', {...values, userId:user._id,
+        timings:[
+          values.timings[0].format("HH:mm"),
+          values.timings[1].format("HH:mm")
+        ]
+      }, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}`
       }})
-      dispatch(hideLoading)
+      dispatch(hideLoading())
       if(res.data.success){
         message.success(res.data.success)
         navigate('/')
       }
       else message.error(res.data.success)
      }catch(error){
-      dispatch(showLoading)
+      dispatch(hideLoading())
       console.log(error)
       message.error("something went wrong")
      }

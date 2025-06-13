@@ -12,9 +12,10 @@ const Notification = ()=>{
     const {user} = useSelector((state)=> state.user)
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+
     const handleMarkAllRead = async() => {
-        // Logic to mark all notifications as read
-        console.log("Marking all notifications as read");
+        //console.log("Marking all notifications as read");
         try{
             dispatch(showLoading());
             const res = await axios.post('api/v1/user/get-all-notifications', {userId: user._id}, {
@@ -25,6 +26,15 @@ const Notification = ()=>{
 
             dispatch(hideLoading());
             if(res.data.success){
+                // Update user in Redux
+                dispatch({
+                    type: "user/setUser",
+                    payload: {
+                        ...user,
+                        notification: [],
+                        seennotification: res.data.data
+                    }
+                });
                 message.success(res.data.message)
             }
             else{
@@ -38,7 +48,7 @@ const Notification = ()=>{
     };
     const handleDeleteAllRead = async()=>{
         // Logic to delete all read notifications
-        console.log("Deleting all read notifications");
+        //console.log("Deleting all read notifications");
         try{
             dispatch(showLoading());
             const res = await axios.post('api/v1/user/delete-all-notifications', {userId: user._id}, {
@@ -71,13 +81,13 @@ const Notification = ()=>{
                                 Mark All Read
                             </h4>
                         </div>
-                        {user?.notification.map(notificationMgs =>{
-                        <div>
-                            <div onClick={navigate(notificationMgs.onClickPath)}>
+                        {user?.notification.map(notificationMgs =>(
+                        <div className="card">
+                            <div className="card-text" onClick={() => navigate(notificationMgs.onClickPath)}>
                                 {notificationMgs.message}
                             </div>
                         </div>
-                        })}
+                        ))}
                     </Tabs.TabPane>
                 
                     
@@ -88,13 +98,13 @@ const Notification = ()=>{
                                 Delete All Read
                             </h4>
                         </div>
-                        {user?.seennotification.map(notificationMgs =>{
+                        {user?.seennotification.map(notificationMgs =>(
                         <div>
                             <div onClick={navigate(notificationMgs.onClickPath)}>
                                 {notificationMgs.message}
                             </div>
                         </div>
-                        })}
+                        ))}
                     </Tabs.TabPane>
                
 

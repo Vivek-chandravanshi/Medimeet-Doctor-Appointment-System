@@ -1,5 +1,5 @@
 
-import Layout from "../../components/Layout"
+import Layout from "../../component/Layout"
 import { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux";
@@ -18,7 +18,7 @@ const Profile = () =>{
     const navigate = useNavigate();
 
     const handleFinish = async (values) => {
-        console.log("Form submitted with values:", values);
+        //console.log("Form submitted with values:", values);
         try{
         dispatch(showLoading)
         const res = await axios.post('/api/v1/user/doctor/updateProfile', {...values, userId:user._id, timings:[
@@ -170,3 +170,5 @@ const Profile = () =>{
         </Layout>
     )
 }
+
+export default Profile;

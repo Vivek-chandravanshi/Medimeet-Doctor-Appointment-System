@@ -36,7 +36,7 @@ const doctorSchema =  new mongoose.Schema({
         type:String,
         required:[true, 'Experience is required']
     },
-    stauts:{
+    status:{
         type:String,
         default: 'pending'
     },
@@ -47,7 +47,8 @@ const doctorSchema =  new mongoose.Schema({
     timings:{
         type:Object,
         required:[true, 'Timings are required']
-    }
+    },
+    
 },{timestamps:true})
 
 const doctorModel = mongoose.model('doctors', doctorSchema)
